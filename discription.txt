@@ -1,0 +1,97 @@
+crontab 设置命令
+* * * * * cd /vagrant/timer;php cron_mission.php >> cron_mission.log
+
+add_queue.php 添加进程任务
+通过add方法往进程表添加进程数据
+
+do_queque.php 执行进程任务
+主要获取进程数据后,进行命令行操作send_msg.php 去发送短信
+
+Message.php 模拟发短信 等操作的业务逻辑
+
+send_msg.php 发送短信过程
+
+Queue.class.php 进程数据表的操作 入队，出队 , 获取数据
+
+cron_mission.php 用于cron执行，主要通过cron_mission.php再去执行do_queue.php
+
+
+//redis 异步处理相关模块
+Redis.class.php redis_model 封装一些redis操作
+
+redis_demo.php redis的入队操作
+
+redis.queueout.php redis的出队操作，在底层的supervisor进程守护方式运行
+
+
+
+redis扩展安装步骤
+
+下载：https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz
+
+上传phpredis-2.2.4.tar.gz到/usr/local/src目录
+
+
+cd /usr/local/src #进入软件包存放目录
+
+tar zxvf phpredis-2.2.4.tar.gz #解压
+
+cd phpredis-2.2.4 #进入安装目录
+
+phpize (需要安装php5-dev扩展)
+
+./configure  #配置
+
+make #编译
+
+make install #安装
+
+打开php.ini ,添加extension="redis.so"
+
+重启apache
+
+
+redis 笔记
+
+LPUSH testlist(列表名称) baba(内容)
+将baba存入到testlist列表
+
+LRANGE testlist 0 10
+获取testlist列表 10条数据
+
+http://www.runoob.com/redis/lists-lpop.html
+redis教程网站
+
+
+redis实现整体方案:
+1.通过redis 列表数据结构 将要单列任务 Lpush 到队列中
+2.目前方案是通过cron脚本去执行，通过lpop取出队列数据，之后进行相关逻辑操作.(如果中间服务器宕机，则会出现问题) 
+方案二:取出队列数据通过blpop结合while(true)死循环的方式来做，然后用Supervisor来守护当前用户脚本命令的进程来实现
+
+安装supervisor 
+
+1.sudo apt-get install supervisor
+2.echo_supervisord_conf > /etc/supervisord.conf 使用root身份创建一个全局配置文件,supervisord程序在运行后会自动查找并加载此目录配置文件。
+3.supervisord : supervisor的服务器端部分，启动supervisor就是运行这个命令
+supervisorctl：启动supervisor的命令行窗口。
+
+4.http://www.cnblogs.com/yjf512/archive/2012/03/05/2380496.html 使用教程链接
+
+http://blog.csdn.net/u012374229/article/details/47158435 //使用教程 csdn 相对比较好
+
+http://www.jianshu.com/p/9abffc905645
+
+5.因为是命令方式安装的supervisor ,当修改命令conf文件的时候，需要进行一下操作
+http://blog.csdn.net/rainloving/article/details/47316595
+
+supervisor 命令设置方式
+command                 = /usr/local/natapp/natapp -authtoken=xxxxxx -log=stdout 
+directory               = /usr/local/natapp 
+process_name            = %(program_name)s_%(process_num)s 
+numprocs                = 1   ;注意这里只能为1  
+autostart               = true 
+autorestart             = true
+;以下为日志,按实际情况修改 
+stdout_logfile          = /var/log/supervisor/natapp_stdout.log 
+stdout_logfile_maxbytes = 10MB 
+stderr_logfile          = /var/log/supervisor/natapp_error.log stderr_logfile_maxbytes = 10MB
