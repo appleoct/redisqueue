@@ -62,6 +62,17 @@ class Redis_model
     {
         //获取列表指定范围内的元素 从第start开始向后去count 个
         return $this->redis->lrange($key ,$start ,$count);
-    } 
+    }
+    
+    //$channel 为数组 $callback为回调函数
+    public function SUBSCRIBE($channel,$callback)
+    {
+        return $this->redis->subscribe($channel,$callback);
+    }
+    
+    public function PUBLISH($channel,$message)
+    {
+        return $this->redis->publish($channel,$message);
+    }
 }
 ?>
