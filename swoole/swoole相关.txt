@@ -1,0 +1,11 @@
+//安装swoole
+
+git clone https://github.com/swoole/swoole-src.git
+cd swoole-src
+phpize
+./configure
+make && make install
+
+如果make 报错
+apt-get update
+apt-get install libpcre3 libpcre3-dev 
