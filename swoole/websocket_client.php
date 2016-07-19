@@ -1,5 +1,11 @@
 <?php
+session_start();
 define('title','聊天室');
+
+if(!isset($_SESSION['nickname']))
+{
+    header("Location: http://192.168.33.10:8050/swoole/login.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +22,7 @@ define('title','聊天室');
 <body>
     <div id="content">
          <h1 style="margin:20px auto;text-align:center;">
-            <?php echo title;?>
+            <?php echo title;?> welcome ! <?php echo $_SESSION['nickname'];?>
         </h1>
         
         <div style="border:1px solid red;height:300px; overflow:scroll; margin-bottom:20px;">
@@ -35,6 +41,7 @@ define('title','聊天室');
    
     
     <script>
+    
     //websocket
     var exampleSocket = new WebSocket("ws://192.168.33.10:9501");
 	  exampleSocket.onopen = function (event) {
@@ -46,8 +53,11 @@ define('title','聊天室');
 	    //console.log(event.data);	    
 	    $('#message_table').append("<tr><td>"+event.data+"</td></tr>");
 	 }
-    
+
+		var nickname = "<?php echo $_SESSION['nickname'];?>";
+	    
     	$('#send_message').click(function(){
+
           var content_message = $('#content_message').val();
 
           if(content_message == "")
@@ -56,8 +66,9 @@ define('title','聊天室');
               return false;   			
           }else
           {
+              var content = nickname + "," + content_message;
           	
-    		  exampleSocket.send(content_message); 
+    		  exampleSocket.send(content); 
     		  
     		  $('#content_message').val(''); 		 
     		  	 
