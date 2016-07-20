@@ -45,6 +45,8 @@ if(!isset($_SESSION['nickname']))
     //websocket
     var exampleSocket = new WebSocket("ws://192.168.33.10:9501");
 	  exampleSocket.onopen = function (event) {
+		  var default_message = '';
+		  exampleSocket.send(default_message);
 	  };
 
 
@@ -55,6 +57,10 @@ if(!isset($_SESSION['nickname']))
 	 }
 
 		var nickname = "<?php echo $_SESSION['nickname'];?>";
+
+
+		//打开页面直接发送一条信息
+		
 	    
     	$('#send_message').click(function(){
 
