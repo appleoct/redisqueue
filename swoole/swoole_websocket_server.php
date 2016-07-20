@@ -18,6 +18,10 @@ $server->on('message', function (swoole_websocket_server $server, $frame) {
    
    user::getInstance()->set($frame->fd,"opcode:{$frame->opcode},fin:{$frame->finish}");
    
+   //$all_user = user::getInstance()->getAll();
+   
+  // print_r($all_user);
+   
    if(!empty($content))
    {
        $length = strlen($content);
@@ -45,6 +49,8 @@ $server->on('message', function (swoole_websocket_server $server, $frame) {
 });
 
 $server->on('close', function ($ser, $fd) {
+    //关闭的话讲对应用户删除
+    user::getInstance()->del($fd);
     echo "client {$fd} closed\n";
 });
 
