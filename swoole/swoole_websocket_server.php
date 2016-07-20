@@ -7,6 +7,8 @@ $server->on('open', function (swoole_websocket_server $server, $request) {
     //echo "server: handshake success with fd{$request->fd}\n";
     
     echo PHP_EOL."服务端接收到客户端发送信息,客户端请求id为".$request->fd."\n";    
+    
+    user::getInstance()->set($request->fd,"client_id:{$request->fd}");
   
 });
 
@@ -15,8 +17,6 @@ $server->on('message', function (swoole_websocket_server $server, $frame) {
    
     
    $content =  $frame->data;
-   
-   user::getInstance()->set($frame->fd,"opcode:{$frame->opcode},fin:{$frame->finish}");
    
    //$all_user = user::getInstance()->getAll();
    

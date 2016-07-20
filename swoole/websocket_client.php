@@ -45,8 +45,8 @@ if(!isset($_SESSION['nickname']))
     //websocket
     var exampleSocket = new WebSocket("ws://192.168.33.10:9501");
 	  exampleSocket.onopen = function (event) {
-		  var default_message = '';
-		  exampleSocket.send(default_message);
+/* 		  var default_message = '';
+		  exampleSocket.send(default_message); */
 	  };
 
 
