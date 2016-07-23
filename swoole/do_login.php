@@ -9,7 +9,7 @@ if(!empty($_POST['nickname']))
     
     $_SESSION['nickname'] = trim($_POST['nickname']);
     
-    header("Location: http://192.168.33.10:8050/swoole/websocket_client.php");
+    header("Location:websocket_client.php");
 }
         
 ?>

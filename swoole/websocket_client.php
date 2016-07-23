@@ -4,7 +4,7 @@ define('title','聊天室');
 
 if(!isset($_SESSION['nickname']))
 {
-    header("Location: http://192.168.33.10:8050/swoole/login.php");
+    header("Location:login.php");
 }
 ?>
 <!DOCTYPE html>
