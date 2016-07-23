@@ -18,20 +18,20 @@ $server->on('message', function (swoole_websocket_server $server, $frame) {
     
    $content =  $frame->data;
    
+   $new_data = json_decode($content,true);
+   
+   
    //$all_user = user::getInstance()->getAll();
    
   // print_r($all_user);
    
-   if(!empty($content))
+   if(!empty($new_data))
    {
-       $length = strlen($content);
         
-       $index = strpos($content,',');
+       $nickname = $new_data['nickname'];
         
-       $nickname = substr($content,0,$index);
-        
-       $message = substr($content,$index+1,$length);
-        
+       $message = $new_data['content_message'];
+        echo $message;
       
        //echo "收到客户端 id号为:".$frame->fd." 信息为:".$frame->data." opcode:".$frame->opcode." fin:".$frame->finish."\n";
        //发送信息给客户端 frame->data为客户端发送过来的信息 重组加个时间

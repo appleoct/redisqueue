@@ -27,7 +27,6 @@ if(!isset($_SESSION['nickname']))
             
            
         </h1>
-        
         <div style="border:1px solid red;height:300px; overflow:scroll; margin-bottom:20px;">
             <table id="message_table">
                 
@@ -47,7 +46,6 @@ if(!isset($_SESSION['nickname']))
 
     
     <script>
-    
     //websocket
     var exampleSocket = new WebSocket("ws://192.168.33.10:9501");
 	  exampleSocket.onopen = function (event) {
@@ -55,8 +53,7 @@ if(!isset($_SESSION['nickname']))
 
 
 	  exampleSocket.onmessage = function (event) {
-		  //php 端收到信息之后再返回
-	    //console.log(event.data);	    
+		  //php 端收到信息之后再返回  
 	    $('#message_table').append("<tr><td>"+event.data+"</td></tr>");
 	 }
 
@@ -83,7 +80,12 @@ if(!isset($_SESSION['nickname']))
 		                return false;   			
 		            }else
 		            {
-		                var content = nickname + "," + content_message;
+		            	var information = {};
+
+						information['nickname'] = nickname;
+						information['content_message'] = content_message;
+						
+		               var content = JSON.stringify(information);
 		            	
 		      		  exampleSocket.send(content); 
 		      		  
