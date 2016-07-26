@@ -28,4 +28,9 @@ class user
     public function del($key){
         unset($this->user[$key]);
     }
+    
+    public function get($key)
+    {
+        return $this->user[$key];
+    }
 }

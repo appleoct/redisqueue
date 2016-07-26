@@ -46,9 +46,16 @@ if(!isset($_SESSION['nickname']))
 
     
     <script>
+    var nickname = "<?php echo $_SESSION['nickname'];?>";
     //websocket
     var exampleSocket = new WebSocket("ws://192.168.33.10:9501");
 	  exampleSocket.onopen = function (event) {
+		  var default_information = {};
+		  default_information['type'] = 'connect';
+		  default_information['nickname'] = nickname;
+		  default_information['content_message'] = '';
+		  var content = JSON.stringify(default_information);
+		  exampleSocket.send(content); 
 	  };
 
 
@@ -57,7 +64,7 @@ if(!isset($_SESSION['nickname']))
 	    $('#message_table').append("<tr><td>"+event.data+"</td></tr>");
 	 }
 
-		var nickname = "<?php echo $_SESSION['nickname'];?>";
+		
 
 
 		//打开页面直接发送一条信息
@@ -81,7 +88,7 @@ if(!isset($_SESSION['nickname']))
 		            }else
 		            {
 		            	var information = {};
-
+		            	information['type'] = 'message';
 						information['nickname'] = nickname;
 						information['content_message'] = content_message;
 						
