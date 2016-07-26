@@ -52,12 +52,8 @@ $server->on('message', function (swoole_websocket_server $server, $frame) {
            {
                foreach ($histories as $k => $va)
                {
-                   //发给所有用户那么多数据
-                   foreach ($all_user as $key => $value)
-                   {
-                       $server->push($key, $va);
-                   }
-                  
+                   //给刚上线的那位发送
+                  $server->push($frame->fd, $va);         
                }
            }
            
