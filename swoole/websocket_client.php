@@ -43,7 +43,13 @@ if(!isset($_SESSION['nickname']))
             <input type="button" id="send_message" value="发送" />
      
     </div>
-
+    
+    <div style="border:1px solid blue; width:182px;height:100px;position:absolute; top:85px;right:0px;overflow:scroll;">
+        <dl id="online">
+            <dt>在线好友</dt>
+         
+        </dl>
+    </div>
     
     <script>
     var nickname = "<?php echo $_SESSION['nickname'];?>";
@@ -61,7 +67,23 @@ if(!isset($_SESSION['nickname']))
 
 	  exampleSocket.onmessage = function (event) {
 		  //php 端收到信息之后再返回  
-	    $('#message_table').append("<tr><td>"+event.data+"</td></tr>");
+		 var obj = eval('(' + event.data + ')');
+		
+		if(obj.type == 'send_message')
+		{
+			 $('#message_table').append("<tr><td>"+obj.message+"</td></tr>");
+		}
+
+		if(obj.type == 'online')
+		{
+			$('#online').children('dd').remove();
+
+			for(var i=0;i<obj.nicknames.length;i++){
+
+				$('#online').append("<dd style='color:red;'>"+obj.nicknames[i]+"</dd>")
+			}
+			
+		}	   
 	 }
 
 		

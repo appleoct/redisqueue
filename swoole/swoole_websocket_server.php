@@ -53,23 +53,47 @@ $server->on('message', function (swoole_websocket_server $server, $frame) {
                foreach ($histories as $k => $va)
                {
                    //给刚上线的那位发送
-                  $server->push($frame->fd, $va);         
+                   $json_array = array(
+                       'type' => 'send_message',
+                       'message'=>$va
+                   );
+                   
+                   $json_data = json_encode($json_array);
+                   
+                  $server->push($frame->fd, $json_data);         
                }
            }
            
            
            //提示上线
            user::getInstance()->set($frame->fd,array('nickname'=>$nickname));
+           
            foreach ($all_user as $key => $value)
-           {
+           {      
+               //在线统计
+               $online_array = array(
+                   'type' => 'online',
+                   'nicknames' => user::getInstance()->getAllnickname(),
+               );
+                
+               $online_data = json_encode($online_array);
+                
+               $server->push($key, $online_data);
                //              
                if($key !== $frame->fd)
                {
                   $last_data ="<span style='color:blue'>【系统消息】</span>".$nickname.'上线了';
-                  $server->push($key, $last_data);
-               }
+                  
+                  $json_array = array(
+                      'type' => 'send_message',
+                      'message'=>$last_data
+                  );
+                  
+                  $json_data = json_encode($json_array);
+                  
+                  $server->push($key, $json_data);
+               }   
            }
-           
        }else
        {
            
@@ -96,9 +120,16 @@ $server->on('message', function (swoole_websocket_server $server, $frame) {
                
               
                 
-               $last_data = $data.$message.$time;     
+               $last_data = $data.$message.$time;  
+               
+               $json_array = array(
+                   'type' => 'send_message',
+                   'message'=>$last_data
+               );
+                          
+               $json_data = json_encode($json_array);
                 
-               $server->push($key, $last_data);
+               $server->push($key, $json_data);
            }
        } 
    }
@@ -120,8 +151,32 @@ $server->on('close', function ($ser, $fd) {
     {
         foreach ($all_user as $key => $value)
         {
+            //在线统计
+            $online_array = array(
+                'type' => 'online',
+                'nicknames' => user::getInstance()->getAllnickname(),
+            );
+            
+            $online_data = json_encode($online_array);
+            
+            $ser->push($key, $online_data);
+            
+            
+            
             $last_data ="<span style='color:blue'>【系统消息】</span>".$close_user['nickname'].'下线了';
-            $ser->push($key, $last_data);
+            
+            $json_array = array(
+                'type' => 'send_message',
+                'message'=>$last_data
+            );
+            
+            $json_data = json_encode($json_array);
+            
+            $ser->push($key, $json_data);
+            
+            
+            
+            
         } 
     }
     

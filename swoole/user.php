@@ -33,4 +33,15 @@ class user
     {
         return $this->user[$key];
     }
+    
+    public function getAllnickname()
+    {
+        $new_array = array();
+        foreach ($this->user as $k => $va)
+        {
+            array_push($new_array, $va['nickname']);
+        }
+        
+        return $new_array;
+    }
 }
