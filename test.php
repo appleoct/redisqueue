@@ -4,5 +4,5 @@
    $redis->connect('192.168.33.10', 6379);
    echo "Connection to server sucessfully";
          //查看服务是否运行
-   echo "Server is running: " . $redis->ping();
+   echo "Server is running: " . $redis->ping();   
 ?>
