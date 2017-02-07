@@ -6,8 +6,8 @@ class Redis_model
     public function __construct()
     {
         $this->redis = new Redis();       
-        $this->redis->connect('192.168.33.10', 6379);
-        //$this->redis->connect('127.0.0.1', 6379);
+        
+        $this->redis->connect('127.0.0.1', 6379);
     }
     
     public function SET($key)

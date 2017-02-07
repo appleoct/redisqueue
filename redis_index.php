@@ -1,8 +1,8 @@
 <?php
 $redis = new Redis();
-$redis->connect('192.168.33.10', 6379);
-//$redis->set('test','hello world!');
-//print_r($redis->keys('user:1'));exit;
+$redis->connect('127.0.0.1', 6379);
+$redis->set('test','hello world!');
+var_dump($redis->get('test'));exit;
 //var_dump($redis->keys('*'));exit;
 
 //$redis->lPush("dsadsa",'baba'); 

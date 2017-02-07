@@ -16,6 +16,11 @@ class Mysqlconnect
         $this->connect();
         return mysql_query($sql);
     }
+    
+    public function affected_rows()
+    {     
+        return mysql_affected_rows();
+    }
 
     public function getRow($sql, $limited = false)
     {

@@ -1,7 +1,7 @@
 <?php
 class user
 {
-    public $user =[];
+    public $user =array();
     
     private static $instance;
     
